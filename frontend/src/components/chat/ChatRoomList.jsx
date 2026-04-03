@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import socket from "../socket";
+import socket from "../../socket";
 
 const ChatRoomList = () => {
 const [rooms, setRooms] = useState([]);

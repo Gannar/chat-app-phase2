@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import socket from "../socket";
+import socket from "../../socket";
 
 const MessageForm = ({ roomId }) => {
   const [message, setMessage] = useState("");
@@ -29,15 +29,14 @@ const MessageForm = ({ roomId }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: "flex", gap: "10px" }}>
-      <input
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        placeholder="Type a message..."
-        style={{ flex: 1 }}
-      />
-      <button type="submit">Send</button>
-    </form>
+<form className="message-form" onSubmit={handleSubmit}>
+  <input
+    className="message-input"
+    value={message}
+    onChange={(e) => setMessage(e.target.value)}
+  />
+  <button className="send-btn">Send</button>
+</form>
   );
 };
 

@@ -1,26 +1,16 @@
-
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginForm from "./components/LoginForm";
-import RegisterForm from "./components/RegisterForm";
-import PrivateRoute from "./components/PrivateRoute";
+import React, { useState } from "react";
+import AuthPage from "./pages/AuthPage";
+import ChatPage from "./pages/ChatPage";
 
 function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/register" element={<RegisterForm />} />
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!localStorage.getItem("token")
+  );
 
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <h1>Dashboard (Protected)</h1>
-            </PrivateRoute>
-          }
-        />
-      </Routes>
-    </Router>
+  return isAuthenticated ? (
+    <ChatPage />
+  ) : (
+    <AuthPage onAuth={() => setIsAuthenticated(true)} />
   );
 }
 

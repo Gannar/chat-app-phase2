@@ -1,0 +1,48 @@
+/* Default = Desktop */
+.chat-container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.chat-sidebar {
+  width: 30%;
+  min-width: 250px;
+}
+
+/* Chat area */
+.chat-main {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 🔥 MOBILE (Tablets & Phones) */
+@media (max-width: 768px) {
+  .chat-container {
+    flex-direction: column;
+  }
+
+  .chat-sidebar {
+    width: 100%;
+    height: 30%;
+    overflow-y: auto;
+  }
+
+  .chat-main {
+    width: 100%;
+    height: 70%;
+  }
+}
+
+/* 🔥 SMALL MOBILE */
+@media (max-width: 480px) {
+  .chat-sidebar {
+    display: none; /* hide sidebar */
+  }
+
+  .chat-main {
+    width: 100%;
+    height: 100%;
+  }
+}
