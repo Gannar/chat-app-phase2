@@ -59,6 +59,35 @@ socket.emit("leaveRoom", roomId);
 
 };
 
+const Chat = ({ roomId }) => {
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    // Join room
+    socket.emit("joinRoom", roomId);
+
+    // Listen for messages
+    socket.on("newMessage", (msg) => {
+      setMessages((prev) => [...prev, msg]);
+    });
+
+    return () => {
+      socket.emit("leaveRoom", roomId);
+      socket.off("newMessage");
+    };
+  }, [roomId]);
+
+  return (
+    <div>
+      {messages.map((msg) => (
+        <div key={msg._id}>
+          <strong>{msg.sender.name}:</strong> {msg.content}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 return ( <div> <h2>Chat Rooms</h2>
 {rooms.map((room) => ( <div key={room._id}> <h4>{room.name}</h4> <p>Members: {room.members?.length}</p>
 

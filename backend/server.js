@@ -36,6 +36,38 @@ io.on("connection", (socket) => {
     socket.leave(roomId);
   });
 
+   // 🔥 HANDLE SENDING MESSAGE
+  socket.on("sendMessage", async ({ roomId, userId, content }) => {
+    try {
+      if (!content || !content.trim()) return;
+
+      const room = await ChatRoom.findById(roomId);
+      if (!room) return;
+
+      // Optional: check membership
+      const isMember = room.members.some(
+        (id) => id.toString() === userId
+      );
+      if (!isMember) return;
+
+      // Save message
+      const message = await Message.create({
+        chatRoom: roomId,
+        sender: userId,
+        content: content.trim(),
+      });
+
+      const populatedMessage = await Message.findById(message._id)
+        .populate("sender", "name email");
+
+      // 🔥 Broadcast to room
+      io.to(roomId).emit("newMessage", populatedMessage);
+
+    } catch (err) {
+      console.error("Socket message error:", err.message);
+    }
+  });
+
   socket.on("disconnect", () => {
     console.log("❌ User disconnected:", socket.id);
   });
@@ -45,6 +77,7 @@ io.on("connection", (socket) => {
 // Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/chatrooms", require("./routes/chatRooms")); 
+app.use("/api/messages", require("./routes/messages"));
 
 const PORT = process.env.PORT;
 server.listen(PORT, () => {
